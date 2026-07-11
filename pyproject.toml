@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gstaccelerator"
+version = "0.2.0"
+description = "Python client for the GST Accelerator API — India GST HSN/SAC lookup, GSTIN validation, condition resolver"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "httpx>=0.24.0",
+    "mcp>=1.0.0"
+]
+
+[project.scripts]
+gstaccelerator-mcp = "gstaccelerator.mcp_server:main"
+
+[project.urls]
+Homepage = "https://gstaccelerator.in"
+Documentation = "https://gstaccelerator.in/docs"
+Repository = "https://github.com/thedivine1/gst-hsn-api"
