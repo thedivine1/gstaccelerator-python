@@ -1,4 +1,4 @@
-from .client import GSTAccelerator
+from .client import GSTAccelerator, InvoiceClient
 from .exceptions import (
     GSTAcceleratorError, AuthenticationError, RateLimitError,
     NotFoundError, ValidationError, ServerError
@@ -16,5 +16,6 @@ __all__ = [
     "HSNResult",
     "GSTINResult",
     "TaxRates",
-    "ApplicableRate"
+    "ApplicableRate",
+    "InvoiceClient"
 ]

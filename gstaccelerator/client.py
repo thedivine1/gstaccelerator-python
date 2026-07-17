@@ -70,6 +70,59 @@ class GSTINClient(_BaseClient):
     def pan(self, gstin: str) -> dict:
         return self._request("GET", f"/api/v1/gstin/{gstin}/pan")
 
+
+class InvoiceClient(_BaseClient):
+    def classify(
+        self,
+        seller_state: str,
+        buyer_state: str,
+        items: List[Dict],
+    ) -> dict:
+        """
+        Classify invoice line items as CGST+SGST (intrastate) or IGST (interstate)
+        and return a complete tax breakdown per item and for the full document.
+
+        Args:
+            seller_state: Seller's state — full name ("Maharashtra"), abbreviation
+                          ("MH"), or 2-digit GST code ("27").
+            buyer_state:  Buyer's state — same format as seller_state.
+            items:        List of dicts, each with keys:
+                            - hsn_code  (str)   e.g. "61099090"
+                            - quantity   (float) e.g. 10
+                            - rate       (float) unit price in INR e.g. 500.0
+
+        Returns:
+            dict with keys:
+                transaction_type    "intrastate" | "interstate"
+                items               list of per-line breakdowns
+                total_base_amount   float
+                total_cgst_amount   float
+                total_sgst_amount   float
+                total_igst_amount   float
+                total_cess_amount   float
+                total_tax_amount    float
+                grand_total         float
+
+        Example::
+
+            result = gst.invoice.classify(
+                seller_state="Maharashtra",
+                buyer_state="Karnataka",
+                items=[
+                    {"hsn_code": "61099090", "quantity": 10, "rate": 500},
+                    {"hsn_code": "84713010", "quantity": 2,  "rate": 45000},
+                ]
+            )
+            print(result["transaction_type"])  # "interstate"
+            print(result["grand_total"])        # e.g. 112400.0
+        """
+        payload = {
+            "seller_state": seller_state,
+            "buyer_state":  buyer_state,
+            "items":        items,
+        }
+        return self._request("POST", "/api/v1/invoice/classify", json=payload)
+
 class GSTAccelerator:
     def __init__(
         self,
@@ -100,9 +153,10 @@ class GSTAccelerator:
         self._client._gsta_max_retries = max_retries
         self._client._gsta_retry_delay = retry_delay
         
-        self.hsn = HSNClient(self._client)
-        self.sac = SACClient(self._client)
-        self.gstin = GSTINClient(self._client)
+        self.hsn    = HSNClient(self._client)
+        self.sac    = SACClient(self._client)
+        self.gstin  = GSTINClient(self._client)
+        self.invoice = InvoiceClient(self._client)
 
     def lookup(
         self,
