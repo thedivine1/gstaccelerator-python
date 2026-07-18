@@ -83,13 +83,15 @@ class InvoiceClient(_BaseClient):
         and return a complete tax breakdown per item and for the full document.
 
         Args:
-            seller_state: Seller's state — full name ("Maharashtra"), abbreviation
+            seller_state: Seller's state - full name ("Maharashtra"), abbreviation
                           ("MH"), or 2-digit GST code ("27").
-            buyer_state:  Buyer's state — same format as seller_state.
+            buyer_state:  Buyer's state - same format as seller_state.
             items:        List of dicts, each with keys:
                             - hsn_code  (str)   e.g. "61099090"
-                            - quantity   (float) e.g. 10
-                            - rate       (float) unit price in INR e.g. 500.0
+                            - quantity  (float) (optional) e.g. 10
+                            - rate      (float) (optional) unit price in INR e.g. 500.0
+                            - amount    (float) (optional) total line amount in INR e.g. 5000.0
+                          *Note: Either rate or amount must be provided.*
 
         Returns:
             dict with keys:
