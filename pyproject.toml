@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gstaccelerator"
-version = "0.3.0"
+version = "0.3.1"
 description = "Python client for the GST Accelerator API — India GST HSN/SAC lookup, GSTIN validation, condition resolver"
 readme = "README.md"
 requires-python = ">=3.8"

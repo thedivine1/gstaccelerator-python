@@ -145,7 +145,7 @@ class GSTAccelerator:
             "Content-Type": "application/json"
         }
         if api_key:
-            headers["Authorization"] = f"Bearer {api_key}"
+            headers["X-API-Key"] = api_key
             
         self._client = httpx.Client(
             base_url=base_url,
@@ -183,7 +183,7 @@ class GSTAccelerator:
 
     def bulk(self, descriptions: List[str]) -> List[List[Dict]]:
         base = _BaseClient(self._client)
-        return base._request("POST", "/api/v1/bulk", json={"descriptions": descriptions})
+        return base._request("POST", "/api/v1/bulk", json=descriptions)
         
     def health(self) -> dict:
         base = _BaseClient(self._client)
