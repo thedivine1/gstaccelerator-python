@@ -18,7 +18,7 @@ class PostInstallCommand(install):
 
 setup(
     name="gstaccelerator",
-    version="0.3.1",
+    version="0.3.2",
     cmdclass={
         'install': PostInstallCommand,
     },
