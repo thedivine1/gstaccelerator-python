@@ -34,6 +34,20 @@ def main():
         result = gst.gstin.validate(gstin)
         return json.dumps(result, indent=2)
         
+    @mcp.tool()
+    def sac_lookup(code: str) -> str:
+        """Look up Indian GST rate for a specific SAC code"""
+        import json
+        result = gst.sac.get(code)
+        return json.dumps(result, indent=2)
+
+    @mcp.tool()
+    def invoice_classify(seller_state: str, buyer_state: str, items: list) -> str:
+        """Classify invoice line items as CGST+SGST (intrastate) or IGST (interstate)"""
+        import json
+        result = gst.invoice.classify(seller_state=seller_state, buyer_state=buyer_state, items=items)
+        return json.dumps(result, indent=2)
+        
     mcp.run()
 
 if __name__ == "__main__":
